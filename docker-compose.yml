@@ -1,0 +1,28 @@
+version: '3'
+services:
+  tg_bot:
+    container_name: tg_bot
+    build:
+      context: .
+      dockerfile: Dockerfile_bot
+    volumes:
+      - torrent:/torrent
+    restart: always
+
+  transmission:
+    container_name: transmission
+    build:
+      context: .
+      dockerfile: Dockerfile_trbt
+    volumes:
+      - torrent:/torrent
+      - /downloads:/downloads
+    ports:
+      - "${SSH_SYNC_PORT}:22"
+      - "${RPC_EXTERNAL_PORT}:9091"
+      - "${DAEMON_EXTERNAL_PORT}:${DAEMON_EXTERNAL_PORT}"
+    restart: always
+
+volumes:
+  torrent:
+  downloads:

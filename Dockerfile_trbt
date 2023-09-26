@@ -1,0 +1,14 @@
+FROM ubuntu:lunar-20230816
+
+RUN apt update && apt -y install transmission-daemon ssh rsync
+
+WORKDIR /root
+
+COPY --chmod=600 ./trbt_key.pub /root/.ssh/authorized_keys
+COPY ./sshd_config /etc/ssh/sshd_config
+COPY --chmod=700 ./entrypoint.sh /root/entrypoint.sh
+COPY --chmod=655 ./settings.json /root/.config/transmission-daemon/settings.json
+
+RUN mkdir /torrent && mkdir /downloads
+
+ENTRYPOINT ["./entrypoint.sh"]
